@@ -1,0 +1,6 @@
+.git
+.env
+cache/
+models/
+__pycache__/
+*.py[cod]

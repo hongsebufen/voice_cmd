@@ -1,0 +1,31 @@
+services:
+  speech:
+    build:
+      context: .
+      args:
+        BASE_IMAGE: ${THOR_BASE_IMAGE:-thor-pytorch:2.9.1-cu130-r38.2}
+    image: local/asr-tts:thor
+    container_name: asr-tts
+    restart: unless-stopped
+    runtime: nvidia
+    environment:
+      ASR_MODEL: ${ASR_MODEL:-base}
+      ASR_DEVICE: ${ASR_DEVICE:-cuda}
+      ASR_LANGUAGE: ${ASR_LANGUAGE:-zh}
+      PIPER_MODEL: /models/zh_CN-huayan-medium.onnx
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    ports:
+      - "${HOST_PORT:-8000}:8000"
+    volumes:
+      - ./models:/models:ro
+      - ./cache/whisper:/root/.cache/whisper
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
