@@ -1,7 +1,5 @@
 .env
 .venv/
 cache/
-models/*.onnx
-models/*.onnx.json
 __pycache__/
 *.py[cod]
