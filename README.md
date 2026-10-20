@@ -11,7 +11,8 @@ cd /home/nvidia/workspace/asr-tts-docker
 cp .env.example .env
 chmod +x scripts/download_voice.sh
 ./scripts/download_voice.sh
-docker compose up -d --build
+chmod +x scripts/start.sh
+./scripts/start.sh
 ```
 
 第一次构建会安装 Python 依赖；第一次 ASR 模型加载时，Whisper 会下载 `.env` 中指定的模型到 `cache/whisper`。服务启动后访问：

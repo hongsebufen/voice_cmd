@@ -1,0 +1,13 @@
+llm:
+  analyze_url: "http://192.168.195.187:8006/analyze"
+  timeout_seconds: 15
+
+assistant:
+  wake_words:
+    - "小助手"
+    - "机械臂"
+  wake_window_seconds: 10
+
+robot:
+  # 接入真实机械臂协议前保持 true，避免误动作。
+  dry_run: true

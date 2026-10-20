@@ -8,10 +8,14 @@ ENV PYTHONUNBUFFERED=1 \
     WHISPER_CACHE_DIR=/root/.cache/whisper
 
 COPY requirements.txt /app/requirements.txt
+COPY pyproject.toml uv.lock /app/
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ffmpeg libespeak-ng1 && \
     rm -rf /var/lib/apt/lists/* && \
-    python -m pip install --no-cache-dir -r /app/requirements.txt
+    printf 'setuptools<82\n' > /tmp/build-constraints.txt && \
+    python -m pip install --no-cache-dir --build-constraint /tmp/build-constraints.txt -r /app/requirements.txt uv && \
+    uv export --locked --no-dev --format requirements-txt --output-file /tmp/llm-requirements.txt && \
+    uv pip install --system --no-cache -r /tmp/llm-requirements.txt
 
 COPY app /app/app
 
